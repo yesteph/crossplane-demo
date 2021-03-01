@@ -2,6 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-#providerConfigName: "default"
+providerConfigName: "default"
 region: eu-west-3
-cidrBlock: "10.0.0.0/16"
+cidrBlock:
+  vpc: "10.0.0.0/16"
+  privateSubnet1: "10.0.0.0/24"
+  privateSubnet2: "10.1.0.0/24"
+  privateSubnet3: "10.2.0.0/24"

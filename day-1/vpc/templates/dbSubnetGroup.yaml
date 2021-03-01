@@ -1,0 +1,18 @@
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: DBSubnetGroup
+metadata:
+  name: {{ include "vpc.fullname" . }}
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+spec:
+  providerConfigRef: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    description: 'A DB subnet group!!!'
+    subnetIdSelector:
+      matchLabels:
+        vpc: crossplane-vpc
+        private: 'true'
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}
