@@ -1,0 +1,40 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositenetworks.aws.platformref.wescale.fr
+spec:
+  # Comment claimNames to enforce static provisioning.
+  # Only creation of cluster scope resource "CompositeNetwork.aws.platformref.wescale.fr/v1alpha1" is possible
+  claimNames:
+    kind: Network
+    plural: networks
+  group: aws.platformref.wescale.fr
+  names:
+    kind: CompositeNetwork
+    plural: compositenetworks
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: ID of this Network that other objects will use to refer to it.
+                clusterRef:
+                  type: object
+                  description: "A reference to the Cluster object that this network will be used for."
+                  properties:
+                    id:
+                      type: string
+                      description: ID of the Cluster object this ref points to.
+                  required:
+                    - id
+              required:
+                - id
+                - clusterRef

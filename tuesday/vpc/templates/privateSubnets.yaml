@@ -1,0 +1,46 @@
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: {{ include "vpc.fullname" . }}-priv-1
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+    vpc: {{ include "vpc.fullname" . }}
+    publicOrPrivate: private
+    availabilityZone: {{ .Values.region }}a
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    availabilityZone: {{ .Values.region }}a
+    vpcIdRef:
+      name: {{ include "vpc.fullname" . }}
+    cidrBlock: {{ .Values.cidrBlock.privateSubnet1 }}
+    mapPublicIPOnLaunch: false
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}-priv-1
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: {{ include "vpc.fullname" . }}-priv-2
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+    vpc: {{ include "vpc.fullname" . }}
+    publicOrPrivate: private
+    availabilityZone: {{ .Values.region }}b
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    availabilityZone: {{ .Values.region }}b
+    vpcIdRef:
+      name: {{ include "vpc.fullname" . }}
+    cidrBlock: {{ .Values.cidrBlock.privateSubnet2 }}
+    mapPublicIPOnLaunch: false
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}-priv-2

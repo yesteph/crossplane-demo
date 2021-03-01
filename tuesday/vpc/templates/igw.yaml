@@ -1,0 +1,17 @@
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: InternetGateway
+metadata:
+  name: {{ include "vpc.fullname" . }}
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    vpcIdSelector:
+      matchLabels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}

@@ -1,0 +1,26 @@
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: VPC
+metadata:
+  name: {{ include "vpc.fullname" . }}
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    cidrBlock: {{ .Values.cidrBlock.vpc }}
+    enableDnsHostNames: true
+    enableDnsSupport: true
+    instanceTenancy: default
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}    
+    # Crossplane adds the 3 following tags automatically.
+    # We add them in the explicit spec to avoid diff with Argo.
+    - key: crossplane-kind	
+      value: vpc.ec2.aws.crossplane.io	
+    - key: crossplane-name	
+      value: {{ include "vpc.fullname" . }}
+    - key: crossplane-providerconfig	
+      value: {{ .Values.providerConfigName }}

@@ -1,0 +1,58 @@
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Address
+metadata:
+  name: my-crossplane-eip1
+spec:
+  forProvider:
+    region: eu-west-3
+    tags:
+    - key: Name
+      value: my-crossplane-eip1
+---    
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Address
+metadata:
+  name: my-crossplane-eip2
+spec:
+  forProvider:
+    region: eu-west-3
+    tags:
+    - key: Name
+      value: my-crossplane-eip2
+---    
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: NATGateway
+metadata:
+  name: my-crossplane-nat1
+  labels:
+    vpc: my-basic-crossplane-vpc
+    availabilityZone: eu-west-3a
+spec:
+  forProvider:
+    region: eu-west-3
+    allocationIdRef:
+      name: my-crossplane-eip1
+    subnetIdRef:
+      name: my-public-crossplane-subnet1
+    tags:
+    - key: Name
+      value: my-crossplane-nat1
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: NATGateway
+metadata:
+  name: my-crossplane-nat2
+  labels:
+    vpc: my-basic-crossplane-vpc
+    availabilityZone: eu-west-3b
+spec:
+  forProvider:
+    region: eu-west-3
+    allocationIdRef:
+      name: my-crossplane-eip2
+    subnetIdRef:
+      name: my-public-crossplane-subnet2
+    tags:
+    - key: Name
+      value: my-crossplane-nat2
