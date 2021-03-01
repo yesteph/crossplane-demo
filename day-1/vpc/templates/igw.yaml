@@ -9,8 +9,9 @@ spec:
     name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
-    vpcIdRef:
-      name: {{ include "vpc.fullname" . }}
+    vpcIdSelector:
+      matchLabels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
     tags:
     - key: Name
       value: {{ include "vpc.fullname" . }}

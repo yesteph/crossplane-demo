@@ -12,7 +12,7 @@ spec:
     description: 'A DB subnet group!!!'
     subnetIdSelector:
       matchLabels:
-        vpc: {{ include "vpc.fullname" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
         private: 'true'
     tags:
     - key: Name

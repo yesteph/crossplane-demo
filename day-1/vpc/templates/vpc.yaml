@@ -15,7 +15,9 @@ spec:
     instanceTenancy: default
     tags:
     - key: Name
-      value: {{ include "vpc.fullname" . }}
+      value: {{ include "vpc.fullname" . }}    
+    # Crossplane adds the 3 following tags automatically.
+    # We add them in the explicit spec to avoid diff with Argo.
     - key: crossplane-kind	
       value: vpc.ec2.aws.crossplane.io	
     - key: crossplane-name	
