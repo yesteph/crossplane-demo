@@ -16,3 +16,9 @@ spec:
     tags:
     - key: Name
       value: {{ include "vpc.fullname" . }}
+    - key: crossplane-kind	
+      value: vpc.ec2.aws.crossplane.io	
+    - key: crossplane-name	
+      value: {{ include "vpc.fullname" . }}
+    - key: crossplane-providerconfig	
+      value: {{ .Values.providerConfigName }}
