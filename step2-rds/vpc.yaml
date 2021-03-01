@@ -1,0 +1,85 @@
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: VPC
+metadata:
+  name: crossplane-vpc
+spec:
+  forProvider:
+    region: eu-west-3
+    cidrBlock: 10.0.0.0/16
+    enableDnsHostNames: true
+    enableDnsSupport: true
+    instanceTenancy: default
+    tags:
+    - key: Name
+      value: crossplane-vpc
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: InternetGateway
+metadata:
+  name: crossplane-igw
+spec:
+ forProvider:
+    region: eu-west-3
+    vpcIdRef:
+      name: crossplane-vpc
+    tags:
+    - key: Name
+      value: crossplane-igw
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: crossplane-subnet1
+  labels:
+    vpc: crossplane-vpc
+    private: 'true'
+spec:
+ forProvider:
+    region: eu-west-3
+    availabilityZone: eu-west-3a
+    vpcIdRef:
+      name: crossplane-vpc
+    cidrBlock: 10.0.0.0/24
+    mapPublicIPOnLaunch: false
+    tags:
+    - key: Name
+      value: crossplane-subnet1
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: crossplane-subnet2
+  labels:
+    vpc: crossplane-vpc
+    private: 'true'
+spec:
+ forProvider:
+    region: eu-west-3
+    availabilityZone: eu-west-3b
+    vpcIdRef:
+      name: crossplane-vpc
+    cidrBlock: 10.0.1.0/24
+    mapPublicIPOnLaunch: false
+    tags:
+    - key: Name
+      value: crossplane-subnet2
+---
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: DBSubnetGroup
+metadata:
+  name: crossplane-dbsubnetgroup
+  labels:
+    vpc: crossplane-vpc
+    private: 'true'
+spec:
+  forProvider:
+    region: eu-west-3
+    description: 'A DB subnet group!!!'
+    subnetIdSelector:
+      matchLabels:
+        vpc: crossplane-vpc
+        private: 'true'
+    tags:
+    - key: Name
+      value: crossplane-dbsubnetgroup
