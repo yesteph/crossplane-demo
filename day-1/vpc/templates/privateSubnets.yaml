@@ -6,12 +6,13 @@ metadata:
     {{- include "vpc.labels" . | nindent 4 }}
     private: 'true'
 spec:
-  providerConfigRef: {{ .Values.providerConfigName }}
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
     availabilityZone: {{ .Values.region }}a
     vpcIdRef:
-      name: crossplane-vpc
+      name: {{ include "vpc.fullname" . }}
     cidrBlock: {{ .Values.cidrBlock.privateSubnet1 }}
     mapPublicIPOnLaunch: false
     tags:
@@ -26,12 +27,13 @@ metadata:
     {{- include "vpc.labels" . | nindent 4 }}
     private: 'true'
 spec:
-  providerConfigRef: {{ .Values.providerConfigName }}
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
     availabilityZone: {{ .Values.region }}b
     vpcIdRef:
-      name: crossplane-vpc
+      name: {{ include "vpc.fullname" . }}
     cidrBlock: {{ .Values.cidrBlock.privateSubnet2 }}
     mapPublicIPOnLaunch: false
     tags:
@@ -46,12 +48,13 @@ metadata:
     {{- include "vpc.labels" . | nindent 4 }}
     private: 'true'
 spec:
-  providerConfigRef: {{ .Values.providerConfigName }}
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
     availabilityZone: {{ .Values.region }}c
     vpcIdRef:
-      name: crossplane-vpc
+      name: {{ include "vpc.fullname" . }}
     cidrBlock: {{ .Values.cidrBlock.privateSubnet3 }}
     mapPublicIPOnLaunch: false
     tags:

@@ -5,7 +5,8 @@ metadata:
   labels:
     {{- include "vpc.labels" . | nindent 4 }}
 spec:
-  providerConfigRef: {{ .Values.providerConfigName }}
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
     vpcIdRef:

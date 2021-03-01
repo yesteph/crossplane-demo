@@ -7,5 +7,5 @@ region: eu-west-3
 cidrBlock:
   vpc: "10.0.0.0/16"
   privateSubnet1: "10.0.0.0/24"
-  privateSubnet2: "10.1.0.0/24"
-  privateSubnet3: "10.2.0.0/24"
+  privateSubnet2: "10.0.1.0/24"
+  privateSubnet3: "10.0.2.0/24"

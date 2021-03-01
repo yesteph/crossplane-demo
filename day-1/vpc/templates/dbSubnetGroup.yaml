@@ -5,13 +5,14 @@ metadata:
   labels:
     {{- include "vpc.labels" . | nindent 4 }}
 spec:
-  providerConfigRef: {{ .Values.providerConfigName }}
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
     description: 'A DB subnet group!!!'
     subnetIdSelector:
       matchLabels:
-        vpc: crossplane-vpc
+        vpc: {{ include "vpc.fullname" . }}
         private: 'true'
     tags:
     - key: Name
