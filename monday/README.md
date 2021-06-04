@@ -101,26 +101,59 @@ kubectl describe vpc
 
 Note that each resource has `forProvider` (desired) at `status.atProvider` (current) attributes.
 
-## Internet Gateway
+## Internet Gateway and objectRef
 
-## Subnets
+We will create an Internet Gateway: see the doc [here](https://doc.crds.dev/github.com/crossplane/provider-aws/ec2.aws.crossplane.io/InternetGateway/v1beta1@v0.18.1).
 
-### Import existing resources
+This Internet gateway must be attached to the VPC of the `my-basic-crossplane-vpc` managed resource.
+We will use the `vpcIdRef` field to do that.
 
-Crossplane supports import of existing Cloud resources.
-You can use the `crossplane.io/external-name`.
+The given `igw.yaml` file should do the job...
 
-To illustrate that, create a subnet with the aws-cli, then import it:
 ```sh
-{
-  cd "$(mktemp -d)"
-  VPC_ID=$(kubectl -n crossplane-system get vpc crossplane-vpc -o jsonpath='{.metadata.annotations.crossplane\.io/external-name}')
-  kubectl get secret aws-creds -n crossplane-system -o jsonpath='{.data.key}' | base64 -d > creds.txt
-  AWS_SHARED_CREDENTIALS_FILE=$(pwd)/creds.txt aws ec2 create-subnet --cidr-block 10.0.5.0/24 --vpc-id "${VPC_ID}" --region eu-west-3
-}
+kubectl apply -f igw.yaml
+kubectl get internetgateway
 ```
 
-Note the subnet id, then create a new Subnet for Crossplane:
+```
+Inspect the created resources:
+```sh
+kubectl describe internetgateway
+```
+
+Question: 
+* Is the IGW ready and synced? Why?
+
+Fix the Yaml file.
+
+## Public subnets
+
+We will create two **public** Subnets attached to the VPC of the `my-basic-crossplane-vpc` managed resource. See the doc [here](https://doc.crds.dev/github.com/crossplane/provider-aws/ec2.aws.crossplane.io/Subnet/v1beta1@v0.18.1).
+
+Each subnet must:
+* be in a distinct availability zone
+* get a CIDR `10.0.0.0/24` or `10.0.1.0/24`
+
+Complete the `public-subnets.yaml` file.
+
+```sh
+kubectl apply -f public-subnets.yaml
+kubectl get subnets
+```
+
+### Private subnets - import existing resources
+
+Crossplane supports import of existing Cloud resources.
+To do that, you can use the `crossplane.io/external-name` annotation inside a managed resource.
+
+With the AWS CLI, we will create two **private** Subnets attached to the VPC of the `my-basic-crossplane-vpc`, then import them:
+```sh
+VPC_ID=$(kubectl -n crossplane-system get vpc my-basic-crossplane-vpc -o jsonpath='{.metadata.annotations.crossplane\.io/external-name}')
+AWS_PROFILE=SET_IT aws ec2 create-subnet --availability-zone eu-west-3a --cidr-block 10.0.2.0/24 --vpc-id "${VPC_ID}" --region eu-west-3
+AWS_PROFILE=SET_IT aws ec2 create-subnet --availability-zone eu-west-3b --cidr-block 10.0.3.0/24 --vpc-id "${VPC_ID}" --region eu-west-3
+```
+
+Note the subnet ids, then edit the `private-subnets.yaml` file to set the `crossplane.io/external-name` annotation:
 
 ```sh
 apiVersion: ec2.aws.crossplane.io/v1beta1
@@ -145,20 +178,46 @@ spec:
       value: crossplane-imported-subnet
 ```
 
+```
+kubectl apply -f private-subnets.yaml
+kubectl get subnet 
+```
+
 Note the tag `Name` has been synced on the AWS side.
+## EIP and Natgateway
 
+We will create an EIP and one NatGateway bound to the EIP for each availability zone.
 
-### End 
+```sh
+kubectl apply -f eip-natgateway.yaml
+kubectl get address,natgateway
+```
 
-Questions:
-* How are the subnets referenced by the DBSubnetGroup ?
-* What are the other possibilities?
-* Where is the stored the login/password of the RDSInstance `rdspostgresql`?
+The NatGateways can take few seconds to be ready.
 
-### Reconcile loops
+## Route tables and object selectors
 
-TODO: change tags, delete objects ?
+We will create three route tables:
+* one public is associated to the public subnets and use the Internet Gateway for non local CIDR
+* one private for each availability zone. It will route non local CIDR to the NatGateway
 
-### Use EIP IP into SG ?
+```sh
+kubectl apply -f route-table.yaml
+kubectl get routetable
+```
 
-TODO: ??
+**NOTE**
+
+Look at the `subnetIdSelector` attribute of the route tables.
+
+## Reconcile loops
+
+On the AWS console, we will delete the `my-public-crossplane-rt` route table:
+* remove the route to the Internet Gateway
+* edit the subnet associations to remove all
+* delete the route table
+
+Wait one minute and refresh the web browser.
+
+Is the route table present?
+
