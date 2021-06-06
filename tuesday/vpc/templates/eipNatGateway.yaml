@@ -13,6 +13,12 @@ spec:
     tags:
     - key: Name
       value: {{ include "vpc.fullname" . }}-eip-1
+    - key: crossplane-kind	
+      value: address.ec2.aws.crossplane.io	
+    - key: crossplane-name	
+      value: {{ include "vpc.fullname" . }}-eip-1
+    - key: crossplane-providerconfig	
+      value: {{ .Values.providerConfigName }}
 ---    
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Address
@@ -28,6 +34,12 @@ spec:
     tags:
     - key: Name
       value: {{ include "vpc.fullname" . }}-eip-2
+    - key: crossplane-kind	
+      value: address.ec2.aws.crossplane.io	
+    - key: crossplane-name	
+      value: {{ include "vpc.fullname" . }}-eip-2
+    - key: crossplane-providerconfig	
+      value: {{ .Values.providerConfigName }}
 ---    
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: NATGateway
