@@ -41,7 +41,6 @@ spec:
     name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
-    availabilityZone: {{ .Values.region }}a
     allocationIdRef:
       name: {{ include "vpc.fullname" . }}-eip-1
     subnetIdRef:
@@ -62,7 +61,6 @@ spec:
     name: {{ .Values.providerConfigName }}
   forProvider:
     region: {{ .Values.region }}
-    availabilityZone: {{ .Values.region }}b
     allocationIdRef:
       name: {{ include "vpc.fullname" . }}-eip-2
     subnetIdRef:
