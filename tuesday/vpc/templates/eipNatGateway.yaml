@@ -1,0 +1,72 @@
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Address
+metadata:
+  name: {{ include "vpc.fullname" . }}-eip-1
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}-eip-1
+---    
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Address
+metadata:
+  name: {{ include "vpc.fullname" . }}-eip-2
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}-eip-2
+---    
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: NATGateway
+metadata:
+  name: {{ include "vpc.fullname" . }}-nat-1
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+    availabilityZone: {{ .Values.region }}a
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    availabilityZone: {{ .Values.region }}a
+    allocationIdRef:
+      name: {{ include "vpc.fullname" . }}-eip-1
+    subnetIdRef:
+      name: {{ include "vpc.fullname" . }}-pub-1
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}-nat-1
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: NATGateway
+metadata:
+  name: {{ include "vpc.fullname" . }}-nat-2
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+    availabilityZone: {{ .Values.region }}b
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    availabilityZone: {{ .Values.region }}b
+    allocationIdRef:
+      name: {{ include "vpc.fullname" . }}-eip-2
+    subnetIdRef:
+      name: {{ include "vpc.fullname" . }}-pub-2
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}-nat-2

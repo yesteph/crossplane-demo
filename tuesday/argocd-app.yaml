@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: declarative-gitops-vpc
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/yesteph/crossplane-demo.git
+    targetRevision: HEAD
+    path: tuesday/vpc
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: crossplane-system
