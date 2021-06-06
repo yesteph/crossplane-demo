@@ -2,9 +2,10 @@
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: RouteTable
 metadata:
-  name: {{- include "vpc.fullname" . }}-pub-rt
+  name: {{ include "vpc.fullname" . }}-pub-rt
   labels:
     {{- include "vpc.labels" . | nindent 4 }}
+    vpc: {{ include "vpc.fullname" . }}
     publicOrPrivate: public
 spec:
   providerConfigRef:
@@ -14,18 +15,18 @@ spec:
     associations:
       - subnetIdSelector:
           matchLabels:
-            vpc: {{ include "vpc.fullname" . }}
+            vpc: my-basic-crossplane-vpc
             publicOrPrivate: public
-            availabilityZone: {{ .Values.region }}a
+            availabilityZone: eu-west-3a
       - subnetIdSelector:
           matchLabels:
-            vpc: {{ include "vpc.fullname" . }}
+            vpc: my-basic-crossplane-vpc
             publicOrPrivate: public
-            availabilityZone: {{ .Values.region }}b
+            availabilityZone: eu-west-3b
     routes:
       - destinationCidrBlock: 0.0.0.0/0
         gatewayIdRef: 
-          name: {{ include "vpc.fullname" . }}
+          name: {{ include "vpc.fullname" . }}-nat-1
     vpcIdRef:
       name: {{ include "vpc.fullname" . }}
     tags:
@@ -35,7 +36,11 @@ spec:
 apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: RouteTable
 metadata:
-  name: {{- include "vpc.fullname" . }}-priv-rt-{{ .Values.region }}a
+  name: {{ include "vpc.fullname" . }}-priv-{{ .Values.region }}a-rt
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+    vpc: {{ include "vpc.fullname" . }}
+    publicOrPrivate: private
 spec:
   providerConfigRef:
     name: {{ .Values.providerConfigName }}
@@ -47,36 +52,6 @@ spec:
             vpc: {{ include "vpc.fullname" . }}
             publicOrPrivate: private
             availabilityZone: {{ .Values.region }}a
-    routes:
-      - destinationCidrBlock: 0.0.0.0/0
-        natGatewayIdRef: 
-          name: {{ include "vpc.fullname" . }}-nat-1
-        # Does not work!!
-        # natGatewayIdSelector:
-        #   matchControllerRef: true
-        #   matchLabels: 
-        #     availabilityZone: eu-west-3a
-    vpcIdRef:
-      name: {{ include "vpc.fullname" . }}
-    tags:
-    - key: Name
-      value: {{- include "vpc.fullname" . }}-priv-rt-{{ .Values.region }}a
----
-apiVersion: ec2.aws.crossplane.io/v1beta1
-kind: RouteTable
-metadata:
-  name: {{- include "vpc.fullname" . }}-priv-rt-{{ .Values.region }}b
-spec:
-  providerConfigRef:
-    name: {{ .Values.providerConfigName }}
-  forProvider:
-    region: {{ .Values.region }}
-    associations:
-      - subnetIdSelector:
-          matchLabels:
-            vpc: {{ include "vpc.fullname" . }}
-            publicOrPrivate: private
-            availabilityZone: {{ .Values.region }}b
     routes:
       - destinationCidrBlock: 0.0.0.0/0
         natGatewayIdRef: 
@@ -90,4 +65,38 @@ spec:
       name: {{ include "vpc.fullname" . }}
     tags:
     - key: Name
-      value: {{- include "vpc.fullname" . }}-priv-rt-{{ .Values.region }}b
+      value: {{ include "vpc.fullname" . }}-priv-{{ .Values.region }}a-rt
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: RouteTable
+metadata:
+  name: {{ include "vpc.fullname" . }}-priv-{{ .Values.region }}b-rt
+  labels:
+    {{- include "vpc.labels" . | nindent 4 }}
+    vpc: {{ include "vpc.fullname" . }}
+    publicOrPrivate: private
+spec:
+  providerConfigRef:
+    name: {{ .Values.providerConfigName }}
+  forProvider:
+    region: {{ .Values.region }}
+    associations:
+      - subnetIdSelector:
+          matchLabels:
+            vpc: {{ include "vpc.fullname" . }}
+            publicOrPrivate: private
+            availabilityZone: {{ .Values.region }}b
+    routes:
+      - destinationCidrBlock: 0.0.0.0/0
+        natGatewayIdRef: 
+          name: my-crossplane-nat2
+        # Does not work!!
+        # natGatewayIdSelector:
+        #   matchControllerRef: true
+        #   matchLabels: 
+        #     availabilityZone: eu-west-3a
+    vpcIdRef:
+      name: {{ include "vpc.fullname" . }}
+    tags:
+    - key: Name
+      value: {{ include "vpc.fullname" . }}-priv-{{ .Values.region }}b-rt
