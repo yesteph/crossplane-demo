@@ -1,0 +1,40 @@
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: my-private-crossplane-subnet1
+  labels:
+    vpc: my-basic-crossplane-vpc
+    publicOrPrivate: 'private'
+    availabilityZone: eu-west-3a
+spec:
+  forProvider:
+    region: eu-west-3
+    availabilityZone: eu-west-3a
+    vpcIdRef:
+      name: my-basic-crossplane-vpc
+    cidrBlock: 10.0.2.0/24
+    mapPublicIPOnLaunch: false
+    tags:
+    - key: Name
+      value: my-private-crossplane-subnet2
+---
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: Subnet
+metadata:
+  name: my-private-crossplane-subnet2
+  labels:
+    vpc: my-basic-crossplane-vpc
+    publicOrPrivate: 'private'
+    availabilityZone: eu-west-3b
+spec:
+  forProvider:
+    region: eu-west-3
+    availabilityZone: eu-west-3b
+    vpcIdRef:
+      name: my-basic-crossplane-vpc
+    cidrBlock: 10.0.3.0/24
+    mapPublicIPOnLaunch: false
+    tags:
+    - key: Name
+      value: my-private-crossplane-subnet2

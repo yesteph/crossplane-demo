@@ -1,0 +1,12 @@
+apiVersion: ec2.aws.crossplane.io/v1beta1
+kind: InternetGateway
+metadata:
+  name: my-basic-crossplane-igw
+spec:
+  forProvider:
+    region: eu-west-3
+    vpcIdRef:
+      name: my-basic-crossplane-vpc
+    tags:
+    - key: Name
+      value: my-basic-crossplane-igw
