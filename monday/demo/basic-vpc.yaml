@@ -2,6 +2,8 @@ apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: VPC
 metadata:
   name: my-basic-crossplane-vpc
+  labels:
+    stack: crossplane-demo
 spec:
   forProvider:
     region: eu-west-3

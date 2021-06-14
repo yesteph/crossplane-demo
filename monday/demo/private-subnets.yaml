@@ -7,6 +7,7 @@ metadata:
     vpc: my-basic-crossplane-vpc
     publicOrPrivate: 'private'
     availabilityZone: eu-west-3a
+    stack: crossplane-demo
 spec:
   forProvider:
     region: eu-west-3
@@ -27,6 +28,7 @@ metadata:
     vpc: my-basic-crossplane-vpc
     publicOrPrivate: 'private'
     availabilityZone: eu-west-3b
+    stack: crossplane-demo
 spec:
   forProvider:
     region: eu-west-3

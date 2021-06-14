@@ -3,6 +3,8 @@ apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Address
 metadata:
   name: my-crossplane-eip1
+  labels:
+    stack: crossplane-demo
 spec:
   forProvider:
     region: eu-west-3
@@ -14,6 +16,8 @@ apiVersion: ec2.aws.crossplane.io/v1beta1
 kind: Address
 metadata:
   name: my-crossplane-eip2
+  labels:
+    stack: crossplane-demo
 spec:
   forProvider:
     region: eu-west-3
@@ -28,6 +32,7 @@ metadata:
   labels:
     vpc: my-basic-crossplane-vpc
     availabilityZone: eu-west-3a
+    stack: crossplane-demo
 spec:
   forProvider:
     region: eu-west-3
@@ -46,6 +51,7 @@ metadata:
   labels:
     vpc: my-basic-crossplane-vpc
     availabilityZone: eu-west-3b
+    stack: crossplane-demo
 spec:
   forProvider:
     region: eu-west-3
