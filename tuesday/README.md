@@ -20,6 +20,7 @@ Wait few minutes to get all the pods running.
 
 At this point, you expose the `argocd-server` service:
 ```sh
+kubectl wait --for=condition=ready pod -n argocd -l app.kubernetes.io/name=argocd-server
 kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 

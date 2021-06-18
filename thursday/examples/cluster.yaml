@@ -1,9 +1,9 @@
 apiVersion: aws.platformref.wescale.fr/v1alpha1
 kind: Cluster
 metadata:
-  name: platform-ref-aws-cluster
+  name: demo-aws-cluster
 spec:
-  id: platform-ref-aws-cluster
+  id: demo-aws-cluster
   parameters:
     nodes:
       count: 3
@@ -13,6 +13,6 @@ spec:
         prometheus:
           version: "10.0.2"
     networkRef:
-      id: platform-ref-aws-network
+      id: demo-aws-network
   writeConnectionSecretToRef:
-    name: platform-ref-aws-cluster
+    name: demo-aws-cluster

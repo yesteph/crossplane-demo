@@ -69,7 +69,7 @@ rm -rf creds.conf
 
 Now, we create the ProviderConfig resource:
 ```sh
-k apply -f providers/config/
+kubectl apply -f providers/config/
 ```
 
 **CONGRATULATIONS: you are now ready to manage AWS resources with Crossplane!**

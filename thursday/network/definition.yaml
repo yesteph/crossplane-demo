@@ -26,15 +26,7 @@ spec:
                 id:
                   type: string
                   description: ID of this Network that other objects will use to refer to it.
-                clusterRef:
-                  type: object
-                  description: "A reference to the Cluster object that this network will be used for."
-                  properties:
-                    id:
-                      type: string
-                      description: ID of the Cluster object this ref points to.
                   required:
                     - id
               required:
                 - id
-                - clusterRef

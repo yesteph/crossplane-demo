@@ -90,19 +90,12 @@ spec:
               matchControllerRef: true
             availabilityZone: eu-west-3a
             tags:
-              - value: shared
-                key: ""
               - key: kubernetes.io/role/internal-elb
                 value: "1"
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.labels[networks.aws.platformref.wescale.fr/network-id]
-        - fromFieldPath: spec.clusterRef.id
-          toFieldPath: spec.forProvider.tags[0].key
-          transforms:
-            - type: string
-              string:
-                fmt: "kubernetes.io/cluster/%s"
+        
     - base:
         apiVersion: ec2.aws.crossplane.io/v1beta1
         kind: Subnet
@@ -118,19 +111,11 @@ spec:
               matchControllerRef: true
             availabilityZone: eu-west-3b
             tags:
-              - value: shared
-                key: ""
               - key: kubernetes.io/role/internal-elb
                 value: "1"
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.labels[networks.aws.platformref.wescale.fr/network-id]
-        - fromFieldPath: spec.clusterRef.id
-          toFieldPath: spec.forProvider.tags[0].key
-          transforms:
-            - type: string
-              string:
-                fmt: "kubernetes.io/cluster/%s"
     - base:
         apiVersion: ec2.aws.crossplane.io/v1beta1
         kind: RouteTable

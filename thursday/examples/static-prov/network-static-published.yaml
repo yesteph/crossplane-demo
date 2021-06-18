@@ -1,0 +1,9 @@
+apiVersion: aws.platformref.wescale.fr/v1alpha1
+kind: CompositeNetwork
+metadata:
+  name: demo-static-aws-network
+spec:
+  id: demo-static-aws-network 
+  writeConnectionSecretToRef:
+    namespace: default
+    name: demo-static-aws-network

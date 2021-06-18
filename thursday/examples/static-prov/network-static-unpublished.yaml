@@ -1,0 +1,6 @@
+apiVersion: aws.platformref.wescale.fr/v1alpha1
+kind: CompositeNetwork
+metadata:
+  name: demo-static-unpublished-aws-network
+spec:
+  id: demo-static-unpublished-aws-network 
