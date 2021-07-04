@@ -8,11 +8,10 @@ kubectl wait --for=condition=ready -l stack=crossplane-demo --timeout=120s vpc,r
 
 ## Reconcile loops
 
-On the AWS console, we will delete the `my-public-crossplane-rt` route table:
-* remove the route to the Internet Gateway
-* edit the subnet associations to remove all
-* delete the route table
+On the AWS console, we will delete the `my-basic-crossplane-igw` internet gateway:
+* detach the internet gateway
+* delete the internet gateway
 
 Wait one minute and refresh the web browser.
 
-Is the route table present?
+Is the internet gateway present?

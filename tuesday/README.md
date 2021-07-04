@@ -2,10 +2,10 @@
 
 See how to deploy our InfraAsCode on Kubernetes.
 
-One of the benefit of Kubernetes is its ecosystem and developer tools.
+One of the benefit of Kubernetes is its ecosystem of tools.
 Among them: ArgoCD and Helm.
 
-This demo starts with installation of ArgoCD to apply gitOps principles.
+This demo starts with the installation of ArgoCD to apply gitOps principles.
 
 Then we will tell ArgoCD to deploy an HELM chart.
 
@@ -18,7 +18,7 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 Wait few minutes to get all the pods running.
 
-At this point, you expose the `argocd-server` service:
+At this point, you can expose the `argocd-server` service:
 ```sh
 kubectl wait --for=condition=ready pod -n argocd -l app.kubernetes.io/name=argocd-server
 kubectl port-forward svc/argocd-server -n argocd 8080:443
@@ -32,7 +32,7 @@ echo "Argo CD login/passwd: admin / ${password}"
 
 # Helm chart on ArgoCD
 
-The `argocd-app.yaml` file declares a ArgoCD application to deploy the local `vpc` Helm chart:
+The `argocd-app.yaml` file declares an ArgoCD application to deploy the local `vpc` Helm chart:
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
@@ -61,6 +61,6 @@ kubectl apply -f argocd-app.yaml -n argocd
 ```
 
 On the [ArgoCD UI](http://localhost:8080), you can see all the crossplane resources.
-As the configured Application for manual `sync` operations, run `sync`.
+Because the ArgoCD Application is configured for **manual** `sync` operations, run `sync`.
 
-Then ArgoCD will create the crossplane resources and so the AWS components.
+At this point, ArgoCD will create the crossplane resources and so the AWS components.
