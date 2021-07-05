@@ -40,15 +40,7 @@ You will note that providers are released independently of the crossplane. In ou
 You can do that using a k8s resource file:
 ```sh
 kubectl apply -f providers/
-````
----
-**NOTE**
-
-Alternatively, you can use the crossplane plugin for kubectl:
-```sh
-kubectl crossplane install provider crossplane/provider-aws:v0.18.1
 ```
----
 
 Ensure the providers are correctly installed: view the new CRDs brought by each Crossplane provider.
 
