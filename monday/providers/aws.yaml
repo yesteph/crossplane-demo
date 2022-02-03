@@ -4,7 +4,7 @@ metadata:
   name: crossplane-provider-aws
 spec:
   ignoreCrossplaneConstraints: false
-  package: crossplane/provider-aws:v0.18.1
+  package: crossplane/provider-aws:v0.23.0
   packagePullPolicy: IfNotPresent
   revisionActivationPolicy: Automatic
   revisionHistoryLimit: 0

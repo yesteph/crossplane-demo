@@ -8,21 +8,21 @@ Get a k8s `control` cluster > v1.17 to provision/manage other clusters and deplo
 
 Use your preferred k8s 
 
-For example on your laptop with minikube:
+Personnaly, I use minikube on my laptop:
 
 ```sh
-minikube start --kubernetes-version=v1.20.0 --addons=ingress
+minikube start --kubernetes-version=v1.23.0 --addons=ingress
 ```
 
-## Install crossplane 1.2.1
+## Install crossplane 1.6.2
 
 ```sh
 kubectl create namespace crossplane-system
 helm repo add crossplane-stable https://charts.crossplane.io/stable/
-helm install crossplane --namespace crossplane-system crossplane-stable/crossplane --version 1.2.1
+helm install crossplane --namespace crossplane-system crossplane-stable/crossplane --version 1.6.2
 ```
 
-Check Crossplane is installed:
+Check Crossplane is well installed:
 ```sh
 echo "Crossplane CRD..."
 kubectl api-resources --api-group=pkg.crossplane.io
@@ -33,9 +33,9 @@ kubectl get all -n crossplane-system
 
 ## Add AWS crossplane provider
 
-We need to install a crossplane package for each provider. The list of available providers is [here](https://crossplane.io/docs/v1.2/api-docs/overview.html#api-documentation).
+We need to install a crossplane package for each provider. The list of available providers is [here](https://crossplane.io/docs/v1.6/api-docs/overview.html#api-documentation).
 
-You will note that providers are released independently of the crossplane. In our case, we will install the AWS provider in version 0.18.1.
+You will note that providers are released independently of the crossplane. In our case, we will install the AWS provider in version 0.23.0.
 
 You can do that using a k8s resource file:
 ```sh
